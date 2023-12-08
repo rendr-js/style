@@ -4,8 +4,8 @@ export type CSS = Partial<CSSStyleDeclaration> & {
   selectors?: Record<string, Partial<CSSStyleDeclaration>>
 };
 
-export type ClassNameMap<ClassKey extends string = string> = Record<ClassKey, string>
-export type ClassDefinitions<ClassKey extends string = string> = Record<ClassKey, CSS>;
+export type ClassNameMap<ClassKey extends string> = Record<ClassKey, string>
+export type ClassDefinitions<ClassKey extends string> = Record<ClassKey, CSS>;
 
 let CAP_LETTER_RE = new RegExp('[A-Z]', 'g')
 
@@ -21,7 +21,7 @@ export let createClasses = <K extends string>(classes: ClassDefinitions<K>): Cla
   let output = {} as ClassNameMap<K>;
   let textContent = '';
   for (let name in classes) {
-    let className = generateId();
+    let className = generateId(name);
     textContent += '.' + className + '{' + cssToString(classes[name]) + '}';
     output[name] = className;
   }
@@ -32,12 +32,12 @@ export let createClasses = <K extends string>(classes: ClassDefinitions<K>): Cla
 let style = document.createElement('style') as HTMLStyleElement;
 document.head.appendChild(style);
 let sheet = style.sheet!;
-export let createClass = (css: CSS): string => {
-  let className = generateId();
-  let textContent = '.' + className + '{' + cssToString(css) + '}';
-  sheet.insertRule(textContent);
-  return className;
-};
+// export let createClass = (css: CSS): string => {
+//   let className = generateId();
+//   let textContent = '.' + className + '{' + cssToString(css) + '}';
+//   sheet.insertRule(textContent);
+//   return className;
+// };
 
 export let cssToString = (css: CSS): string => {
   let textContent = '';
@@ -52,15 +52,23 @@ export let cssToString = (css: CSS): string => {
   return textContent;
 };
 
-export let createKeyframes = <K extends 'from' | 'to' | `${number}%`>(rules: ClassDefinitions<K>): string => {
-  let name = generateId();
-  let textContent = '@keyframes ' + name + '{';
-  for (let rule in rules) {
-    textContent += rule + '{' + cssToString(rules[rule] as CSS) + '}';
+export type KeyFramesNameMap<Key extends string> = Record<Key, string>
+export type KeyFramesDefinitions<Key extends string> = Record<Key, ClassDefinitions<'from' | 'to' | `${number}%`>>;
+
+export let createKeyframes = <K extends string>(keyframesSets: KeyFramesDefinitions<K>): KeyFramesNameMap<K> => {
+  let textContent = '';
+  let output = {} as KeyFramesNameMap<K>;
+  for (let name in keyframesSets) {
+    let keyframesName = generateId(name);
+    textContent += '@keyframes ' + keyframesName + '{';
+    for (let rule in keyframesSets[name]) {
+      textContent += rule + '{' + cssToString(keyframesSets[name][rule] as CSS) + '}';
+    }
+    textContent += '}';
+    output[name] = keyframesName;
   }
-  textContent += '}';
   createStyleAndAppend(textContent);
-  return name;
+  return output;
 };
 
 export let createGlobalStyles = <K extends string>(styles: ClassDefinitions<K>): void => {
@@ -72,7 +80,8 @@ export let createGlobalStyles = <K extends string>(styles: ClassDefinitions<K>):
 };
 
 let createStyleAndAppend = (textContent: string): void => {
-  let style = document.createElement('style');
-  style.innerText = textContent;
-  document.head.appendChild(style);
+  // let style = document.createElement('style');
+  // style.innerText = textContent;
+  // document.head.appendChild(style);
+  sheet.insertRule(textContent);
 }
