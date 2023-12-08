@@ -5,7 +5,7 @@ export let createVar = <T, U extends T extends string ? void : string>(initialVa
   let setValue = (newValue: T) => {
     let formattedValue = typeof newValue === 'string' ? newValue : `${newValue}${unit ?? ''}`;
     document.documentElement.style.setProperty(varName, formattedValue);
-  };s
+  };
   setValue(initialValue);
   return [`var(${varName})`, setValue];
 };
