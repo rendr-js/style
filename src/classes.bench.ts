@@ -2,14 +2,14 @@ import { bench } from 'vitest'
 import { cssToString } from './classes.js';
 
 bench('small', () => {
-  // 16.5 Mhz
+  // 2.9 Mhz
   cssToString({
     color: 'red',
   });
 });
 
 bench('medium', () => {
-  // 4.8 Mhz
+  // 0.45 Mhz
   cssToString({
     color: 'red',
     background: 'pink',
