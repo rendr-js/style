@@ -1,2 +1,2 @@
-export { createClasses, createKeyframes, createGlobalStyles } from './classes.js';
-export { createVars } from './vars.js';
+export { createStyle, createKeyframes, createGlobalStyle } from './classes.js';
+export { createVar } from './vars.js';

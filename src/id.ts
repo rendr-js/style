@@ -1,3 +1,3 @@
 let id = 0;
 
-export let generateId = (name: string): string => name + '-' + (id++).toString(32);
+export let generateId = (): string =>  '_' + (id++).toString(32);
