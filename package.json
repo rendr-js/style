@@ -1,6 +1,6 @@
 {
   "name": "@rendrjs/style",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Official css-in-js solution for Rendrjs",
   "main": "dist/index.js",
   "type": "module",
