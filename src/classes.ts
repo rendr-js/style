@@ -38,7 +38,7 @@ export let cssToString = (css: CSS): string => {
     }
   }
   for (let selector in css.selectors) {
-    textContent += '&' + selector + cssToString(css.selectors[selector]);
+    textContent += '&' + selector + '{' + cssToString(css.selectors[selector]) + '}';
   }
   return textContent;
 };
