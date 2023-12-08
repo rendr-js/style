@@ -42,28 +42,15 @@ export let cssToString = (css: CSS): string => {
   return textContent;
 };
 
-interface KeyframeRules {
-  from?: Partial<CSSStyleDeclaration> & { [key: string]: string }
-  to?: Partial<CSSStyleDeclaration> & { [key: string]: string }
-  [key: `${number}%`]: Partial<CSSStyleDeclaration> & { [key: string]: string }
-}
-
-export let createKeyframes = (rules: KeyframeRules): string => {
+export let createKeyframes = <K extends 'from' | 'to' | `${number}%`>(rules: ClassDefinitions<K>): string => {
   let name = '_' + (id++).toString(32);
   let textContent = '@keyframes ' + name + '{';
-  let rule: keyof KeyframeRules;
-  for (rule in rules) {
-    let styles = rules[rule];
-    textContent += rule + '{';
-    for (let style in styles) {
-      textContent += style + ':' + styles[style] + ';';
-    }
-    textContent += '}';
+  for (let rule in rules) {
+    textContent += rule + '{' + cssToString(rules[rule] as CSS) + '}';
   }
+  textContent += '}';
   let style = document.createElement('style');
-  style.innerText = textContent + '}';
+  style.innerText = textContent;
   document.head.appendChild(style);
   return name;
 };
-
-let f = createKeyframes({});
