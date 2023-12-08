@@ -23,7 +23,7 @@ export let cssToString = (css: CSS): string => {
   let textContent = '';
   for (let prop in css) {
     if (prop !== 'selectors') {
-      textContent += prop + ':' + css[prop];
+      textContent += prop + ':' + css[prop] + ';';
     }
   }
   for (let selector in css.selectors) {
