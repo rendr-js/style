@@ -10,8 +10,12 @@ export type ClassDefinitions<ClassKey extends string = string> = Record<ClassKey
 const CAMEL_CASE_RE = new RegExp('([a-z])([A-Z])', 'g')
 const PASCAL_CASE_RE = new RegExp('^([A-Z])', 'g')
 
+let addDash = (m: string) => '-' + m.toLowerCase();
 let camelTokebab = (s: string): string => {
-  return s.replace(PASCAL_CASE_RE, '-$1').replace(CAMEL_CASE_RE, '$1-$2').toLowerCase();
+  if (s !== s.toLowerCase()) {
+    s = s.replace(/[A-Z]/g, addDash);
+  }
+  return s;
 }
 
 export let createClasses = <K extends string>(classes: ClassDefinitions<K>): ClassNameMap<K> => {
