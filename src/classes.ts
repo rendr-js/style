@@ -1,4 +1,4 @@
-let classNameId = 0;
+let id = 0;
 
 export type CSS = Partial<CSSStyleDeclaration> & {
   selectors?: Record<string, Partial<CSSStyleDeclaration>>
@@ -7,13 +7,12 @@ export type CSS = Partial<CSSStyleDeclaration> & {
 export type ClassNameMap<ClassKey extends string = string> = Record<ClassKey, string>
 export type ClassDefinitions<ClassKey extends string = string> = Record<ClassKey, CSS>;
 
-const CAMEL_CASE_RE = new RegExp('([a-z])([A-Z])', 'g')
-const PASCAL_CASE_RE = new RegExp('^([A-Z])', 'g')
+let CAP_LETTER_RE = new RegExp('[A-Z]', 'g')
 
 let addDash = (m: string) => '-' + m.toLowerCase();
 let camelTokebab = (s: string): string => {
   if (s !== s.toLowerCase()) {
-    s = s.replace(/[A-Z]/g, addDash);
+    s = s.replace(CAP_LETTER_RE, addDash);
   }
   return s;
 }
@@ -21,7 +20,7 @@ let camelTokebab = (s: string): string => {
 export let createClasses = <K extends string>(classes: ClassDefinitions<K>): ClassNameMap<K> => {
   let output = {} as ClassNameMap<K>;
   for (let name in classes) {
-    let className = '_' + (classNameId++).toString(32);
+    let className = '_' + (id++).toString(32);
     let style = document.createElement('style');
     style.innerText = '.' + className + '{' + cssToString(classes[name]) + '}';
     document.head.appendChild(style);
@@ -41,4 +40,24 @@ export let cssToString = (css: CSS): string => {
     textContent += '&' + selector + '{' + cssToString(css.selectors[selector]) + '}';
   }
   return textContent;
+};
+
+type KeyFrame = 'from' | 'to' | `${number}%`;
+
+export let createKeyframes = (rules: Record<KeyFrame, Partial<CSSKeyframeRule['style']>>): string => {
+  let name = '_' + (id++).toString(32);
+  let textContent = '@keyframes ' + name + '{';
+  let rule: KeyFrame;
+  for (rule in rules) {
+    let styles = rules[rule];
+    textContent += rule + '{';
+    for (let style in styles) {
+      textContent += style + ':' + styles[style] + ';';
+    }
+    textContent += '}';
+  }
+  let style = document.createElement('style');
+  style.innerText = textContent + '}';
+  document.head.appendChild(style);
+  return name;
 };
