@@ -29,6 +29,16 @@ export let createClasses = <K extends string>(classes: ClassDefinitions<K>): Cla
   return output;
 };
 
+let style = document.createElement('style') as HTMLStyleElement;
+document.head.appendChild(style);
+let sheet = style.sheet!;
+export let createClass = (css: CSS): string => {
+  let className = '_' + (id++).toString(32);
+  let textContent = '.' + className + '{' + cssToString(css) + '}';
+  sheet.insertRule(textContent);
+  return className;
+};
+
 export let cssToString = (css: CSS): string => {
   let textContent = '';
   for (let prop in css) {
