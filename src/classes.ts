@@ -19,13 +19,13 @@ let camelTokebab = (s: string): string => {
 
 export let createClasses = <K extends string>(classes: ClassDefinitions<K>): ClassNameMap<K> => {
   let output = {} as ClassNameMap<K>;
+  let textContent = '';
   for (let name in classes) {
     let className = '_' + (id++).toString(32);
-    let style = document.createElement('style');
-    style.innerText = '.' + className + '{' + cssToString(classes[name]) + '}';
-    document.head.appendChild(style);
+    textContent += '.' + className + '{' + cssToString(classes[name]) + '}';
     output[name] = className;
   }
+  createStyleAndAppend(textContent);
   return output;
 };
 
@@ -49,8 +49,20 @@ export let createKeyframes = <K extends 'from' | 'to' | `${number}%`>(rules: Cla
     textContent += rule + '{' + cssToString(rules[rule] as CSS) + '}';
   }
   textContent += '}';
+  createStyleAndAppend(textContent);
+  return name;
+};
+
+export let createGlobalStyles = <K extends string>(styles: ClassDefinitions<K>): void => {
+  let textContent = '';
+  for (let name in styles) {
+    textContent += name + '{' + cssToString(styles[name]) + '}';
+  }
+  createStyleAndAppend(textContent);
+};
+
+let createStyleAndAppend = (textContent: string): void => {
   let style = document.createElement('style');
   style.innerText = textContent;
   document.head.appendChild(style);
-  return name;
-};
+}
