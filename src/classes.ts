@@ -1,4 +1,4 @@
-let id = 0;
+import { generateId } from './id.js';
 
 export type CSS = Partial<CSSStyleDeclaration> & {
   selectors?: Record<string, Partial<CSSStyleDeclaration>>
@@ -21,7 +21,7 @@ export let createClasses = <K extends string>(classes: ClassDefinitions<K>): Cla
   let output = {} as ClassNameMap<K>;
   let textContent = '';
   for (let name in classes) {
-    let className = '_' + (id++).toString(32);
+    let className = generateId();
     textContent += '.' + className + '{' + cssToString(classes[name]) + '}';
     output[name] = className;
   }
@@ -33,7 +33,7 @@ let style = document.createElement('style') as HTMLStyleElement;
 document.head.appendChild(style);
 let sheet = style.sheet!;
 export let createClass = (css: CSS): string => {
-  let className = '_' + (id++).toString(32);
+  let className = generateId();
   let textContent = '.' + className + '{' + cssToString(css) + '}';
   sheet.insertRule(textContent);
   return className;
@@ -53,7 +53,7 @@ export let cssToString = (css: CSS): string => {
 };
 
 export let createKeyframes = <K extends 'from' | 'to' | `${number}%`>(rules: ClassDefinitions<K>): string => {
-  let name = '_' + (id++).toString(32);
+  let name = generateId();
   let textContent = '@keyframes ' + name + '{';
   for (let rule in rules) {
     textContent += rule + '{' + cssToString(rules[rule] as CSS) + '}';
