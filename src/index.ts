@@ -1,2 +1,2 @@
-export { createClasses } from './classes';
-export { createVar } from './vars';
+export { createClasses } from './classes.js';
+export { createVar } from './vars.js';

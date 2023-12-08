@@ -1,5 +1,5 @@
 import { bench } from 'vitest'
-import { cssToString } from './classes';
+import { cssToString } from './classes.js';
 
 bench('small', () => {
   // 16.5 Mhz

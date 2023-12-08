@@ -2,12 +2,11 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "strict": true,
-    "target": "esnext",
-    "allowJs": false,
+    "target": "ESNext",
     "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/tests/*"]
+  "exclude": ["src/**/*.test.ts", "src/**/*.bench.ts"]
 }
