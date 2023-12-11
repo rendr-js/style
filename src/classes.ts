@@ -23,7 +23,7 @@ let sheet = style.sheet!;
 export let createStyle = (css: CSS): string => {
   let className = generateId();
   let textContent = '.' + className + '{' + cssToString(css) + '}';
-  sheet.insertRule(textContent);
+  sheet.insertRule(textContent, sheet.cssRules.length);
   return className;
 };
 
