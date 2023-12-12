@@ -1,4 +1,4 @@
-import { generateId } from './id.js';
+import { generateId } from './utils.js';
 
 export let createVar = <T, U extends T extends string ? void : string>(initialValue: T, unit?: U): [string, (newValue: T) => void] => {
   let varName = '--' + generateId();
