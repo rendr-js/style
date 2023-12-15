@@ -1,8 +1,9 @@
 import { CSS } from './css.js';
 
-let CAP_LETTER_RE = new RegExp('[A-Z]', 'g')
+let CAP_LETTER_RE = new RegExp('[A-Z]', 'g');
 
 let addDash = (m: string) => '-' + m.toLowerCase();
+
 export let camelTokebab = (s: string): string => {
   if (s !== s.toLowerCase()) {
     s = s.replace(CAP_LETTER_RE, addDash);
